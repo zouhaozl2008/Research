@@ -1,0 +1,342 @@
+<html>
+<head>
+<link rel="stylesheet" href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+.divcss5{width:100px;height:50px;border:1px solid;position:absolute;left:158px; top:264px} 
+</style>
+</head>
+<body>
+<input type="button" value="revoke" onclick="revokeDraw()"/>
+<input type="button" value="clean" onclick="dropDraw()"/>
+<div id="panel" class="divcss5"></div>
+<br/>
+<canvas width="1000" height="800" style="border:1px solid #c3c3c3;"></canvas>
+<script>
+
+var canvas = document.querySelector('canvas');  
+var ctx = canvas.getContext('2d');  
+var drawOpArry = [];
+
+var rectArry = [
+{x1:158,y1:264,x2:220,y2:300,record:1},
+{x1:230,y1:264,x2:292,y2:300,record:1},
+{x1:304,y1:264,x2:364,y2:300,record:1},
+{x1:376,y1:264,x2:437,y2:300,record:1},
+{x1:163,y1:323,x2:522,y2:333,record:1},
+{x1:163,y1:343,x2:522,y2:350,record:1},
+{x1:163,y1:363,x2:522,y2:369,record:1},
+{x1:163,y1:393,x2:522,y2:404,record:1},
+{x1:163,y1:411,x2:522,y2:418,record:1},
+{x1:163,y1:426,x2:522,y2:436,record:1},
+{x1:163,y1:462,x2:522,y2:489,record:1},
+{x1:163,y1:492,x2:522,y2:525,record:1},
+{x1:163,y1:529,x2:522,y2:556,record:1},
+{x1:147,y1:564,x2:522,y2:683,record:1},
+{x1:303,y1:698,x2:407,y2:713,record:1},
+{x1:441,y1:696,x2:521,y2:712,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:555,y1:299,x2:678,y2:399,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:556,y1:450,x2:688,y2:555,record:1},
+{x1:575,y1:255,x2:932,y2:314,record:1}
+];
+
+//矩形绘制游标
+var rectCursor = -1;
+
+function init() {  
+    // polyfill 提供了这个方法用来获取设备的 pixel ratio  
+    var getPixelRatio = function(context) {  
+        var backingStore = context.backingStorePixelRatio ||  
+            context.webkitBackingStorePixelRatio ||  
+            context.mozBackingStorePixelRatio ||  
+            context.msBackingStorePixelRatio ||  
+            context.oBackingStorePixelRatio ||  
+            context.backingStorePixelRatio || 1;  
+      
+        return (window.devicePixelRatio || 1) / backingStore;  
+    };  
+  
+    var ratio = getPixelRatio(ctx);  
+    var img = new Image();
+    img.onload = function(){
+        ctx.drawImage(img, 0, 0, 1000 * ratio, 800 * ratio);  
+        var index = rectCursor;
+        //for(var index in rectArry){
+        if(rectCursor > -1){
+            ctx.strokeStyle="#F00";
+            ctx.lineWidth=1;
+            ctx.strokeRect(rectArry[index].x1, rectArry[index].y1, 
+                rectArry[index].x2 - rectArry[index].x1,
+                rectArry[index].y2 - rectArry[index].y1
+                );
+
+        }
+       // }
+    }
+    img.src="small.jpg";
+    //canvas.onmousemove=clickRect;
+    canvas.onclick= function(evt){
+      var mousePos = getCanvasPos(canvas, evt); 
+      var op = {};
+      op.mousePos = mousePos;
+      op.ret = 0;
+      drawRight(op);
+       drawOpArry.push(op);  
+    }
+
+
+
+    canvas.onmousemove = function(evt){
+        var mousePos = getCanvasPos(canvas, evt); 
+        console.log(mousePos.x + "," + mousePos.y);
+        var matRect = matchRect(mousePos);
+        if(matRect){
+            reDraw();
+            //ctx.strokeStyle="#F00";/*设置边框*/
+            //ctx.lineWidth=1;/*边框的宽度*/ 
+            //ctx.strokeRect(matRect.x1, matRect.y1, 
+             //   matRect.x2 - matRect.x1,
+              //  matRect.y2 - matRect.y1
+               // );
+        }else{
+            rectCursor = -1;
+            reDraw();
+        }
+
+    }
+
+
+    canvas.dblclick = function(evt){
+        alert(2);
+    }
+} 
+
+
+var getCanvasPos = function(canvas,evt)  
+{//获取鼠标在canvas上的坐标  
+    var rect = canvas.getBoundingClientRect();   
+    return {   
+     x: evt.clientX - rect.left,
+     y: evt.clientY - rect.top
+   };  
+}  
+
+//匹配某个坐标是否落在矩形模板中
+var matchRect = function(mousePos){
+    var loopTimes = 0;
+    for(var index in rectArry){
+        //console.log(mousePos.x + "," + mousePos.y);
+        //console.log(rectArry[index].x1 + "," + rectArry[index].x2 + "," + rectArry[index].x2 + "," + rectArry[index].y2);
+        loopTimes = loopTimes + 1 ;
+
+        if(rectArry[index].x1 < mousePos.x 
+        && rectArry[index].y1 < mousePos.y 
+        && rectArry[index].x2 > mousePos.x 
+        && rectArry[index].y2 > mousePos.y){
+            rectCursor = index;
+            console.log(loopTimes);
+            return rectArry[index];
+        }
+       } 
+       console.log(loopTimes);
+    return "";
+}
+
+var drawRight = function(op){
+    var right = new Image();
+    right.onload = function(){
+        ctx.drawImage(right,op.mousePos.x,op.mousePos.y-20,30,30);
+    }
+    right.src="right.png";
+}
+
+window.onload = init;
+//撤销操作
+var revokeDraw = function(){
+    var op = drawOpArry.pop();
+    init();
+    for(var index in drawOpArry){
+        drawRight(drawOpArry[index]);
+    }
+}
+//重绘
+var reDraw = function(){
+   init();
+    for(var index in drawOpArry){
+        drawRight(drawOpArry[index]);
+    }
+}
+//清除画布手动操作
+var dropDraw = function(){
+    drawOpArry.splice(0,drawOpArry.length);
+    init();
+}
+
+</script>
+</body>
+</html>
