@@ -4,25 +4,32 @@
 <script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <style>
-.divcss5{width:100px;height:50px;border:1px solid;position:absolute;left:158px; top:264px} 
+.divcss5{border:1px solid;position:absolute;left:158px; top:264px;background-color:yellow;} 
 </style>
 </head>
 <body>
 <input type="button" value="revoke" onclick="revokeDraw()"/>
 <input type="button" value="clean" onclick="dropDraw()"/>
-<div id="panel" class="divcss5"></div>
-<br/>
-<canvas width="1000" height="800" style="border:1px solid #c3c3c3;"></canvas>
+<input type="button" value="commit" onclick="countRcd()"/>
+
+<div id="panel" class="divcss5" style="display:none">
+<p>It is example,ok ~~~~~~~~~~~~~~~~~~~~~~~~~</p>
+<input type="button" value="right" onclick="markRight()"/>
+<input type="button" value="wrong"/>
+</div>
+<canvas id="mycanvas" width="1000" height="800" style="border:1px solid #c3c3c3;"></canvas>
 <script>
+
+
 
 var canvas = document.querySelector('canvas');  
 var ctx = canvas.getContext('2d');  
 var drawOpArry = [];
 
 var rectArry = [
-{x1:158,y1:264,x2:220,y2:300,record:1},
-{x1:230,y1:264,x2:292,y2:300,record:1},
-{x1:304,y1:264,x2:364,y2:300,record:1},
+{x1:158,y1:264,x2:220,y2:300,record:10},
+{x1:230,y1:264,x2:292,y2:300,record:3},
+{x1:304,y1:264,x2:364,y2:300,record:5},
 {x1:376,y1:264,x2:437,y2:300,record:1},
 {x1:163,y1:323,x2:522,y2:333,record:1},
 {x1:163,y1:343,x2:522,y2:350,record:1},
@@ -208,6 +215,8 @@ var rectArry = [
 //矩形绘制游标
 var rectCursor = -1;
 
+var locationRect = {};
+
 function init() {  
     // polyfill 提供了这个方法用来获取设备的 pixel ratio  
     var getPixelRatio = function(context) {  
@@ -240,14 +249,14 @@ function init() {
     }
     img.src="small.jpg";
     //canvas.onmousemove=clickRect;
-    canvas.onclick= function(evt){
+    /*canvas.onclick= function(evt){
       var mousePos = getCanvasPos(canvas, evt); 
       var op = {};
       op.mousePos = mousePos;
       op.ret = 0;
       drawRight(op);
        drawOpArry.push(op);  
-    }
+    }*/
 
 
 
@@ -263,10 +272,19 @@ function init() {
              //   matRect.x2 - matRect.x1,
               //  matRect.y2 - matRect.y1
                // );
+            //$("panel").css("left", mousePos.x);
+
+//console.log($('#mycanvas').offset().top+"++++");
+
+            $("#panel").show().css({
+                "left": matRect.x1,
+                "top": matRect.y1 + $('#mycanvas').offset().top - $("#panel").height()});
         }else{
             rectCursor = -1;
             reDraw();
+            $("#panel").hide();
         }
+        locationRect = matRect;
 
     }
 
@@ -310,9 +328,27 @@ var matchRect = function(mousePos){
 var drawRight = function(op){
     var right = new Image();
     right.onload = function(){
-        ctx.drawImage(right,op.mousePos.x,op.mousePos.y-20,30,30);
+        //ctx.drawImage(right,op.mousePos.x,op.mousePos.y-20,30,30);
+        ctx.drawImage(right, op.rect.x2 - 30, op.rect.y2 -30, 30, 30);
     }
     right.src="right.png";
+}
+
+var markRight = function(){
+console.log(locationRect);
+    var right = new Image();
+    right.onload = function(){
+        ctx.drawImage(right, locationRect.x2 - 30, locationRect.y2 -30, 30, 30);
+    }
+    right.src="right.png";
+    var op = {};
+    op.rect = locationRect;
+    op.record = locationRect.record;
+    drawOpArry.push(op);
+}
+
+var markWrong = function(rect){
+    
 }
 
 window.onload = init;
@@ -335,6 +371,14 @@ var reDraw = function(){
 var dropDraw = function(){
     drawOpArry.splice(0,drawOpArry.length);
     init();
+}
+
+var countRcd = function(){
+    var record = 0;
+    for(var index in drawOpArry){
+        record += drawOpArry[index].record;
+    }
+    alert("you record is:" + record);
 }
 
 </script>
