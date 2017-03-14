@@ -1,17 +1,14 @@
 <html>
 <head>
-<link rel="stylesheet" href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+<!--<link rel="stylesheet" href="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">-->
 <!--<script src="https://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>-->
 <script type="text/javascript" src="./jquery-1.11.0.min.js"></script>
-<script src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!--<script src="https://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>-->
 <style>
 .divcss5{border:1px solid;position:absolute;left:158px; top:264px;background-color:yellow;} 
 </style>
 </head>
 <body>
-<input type="button" value="revoke" onclick="revokeDraw()"/>
-<input type="button" value="clean" onclick="dropDraw()"/>
-<input type="button" value="commit" onclick="countRcd()"/>
 
 <div id="panel" class="divcss5" style="display:none">
 <p>It is example,ok ~~~~~~~~~~~~~~~~~~~~~~~~~</p>
@@ -19,6 +16,9 @@
 <input type="button" value="wrong" onclick="markWrong()" />
 </div>
 <canvas id="mycanvas" width="1000" height="800" style="border:1px solid #c3c3c3;"></canvas>
+<input type="button" value="revoke" onclick="revokeDraw()"/>
+<input type="button" value="clean" onclick="dropDraw()"/>
+<input type="button" value="commit" onclick="countRcd()"/>
 <script>
 
 $(function(){
@@ -217,10 +217,12 @@ var rectArry = [
 
 //矩形绘制游标
 var rectCursor = -1;
+var lastCursor = -1;
 
 var locationRect = {};
 
 function init() {  
+    console.log("init");
     // polyfill 提供了这个方法用来获取设备的 pixel ratio  
     var getPixelRatio = function(context) {  
         var backingStore = context.backingStorePixelRatio ||  
@@ -239,16 +241,20 @@ function init() {
         ctx.drawImage(img, 0, 0, 1000 * ratio, 800 * ratio);  
         var index = rectCursor;
         //for(var index in rectArry){
+
         if(rectCursor > -1){
-            ctx.strokeStyle="#F00";
-            ctx.lineWidth=1;
-            ctx.strokeRect(rectArry[index].x1, rectArry[index].y1, 
-                rectArry[index].x2 - rectArry[index].x1,
-                rectArry[index].y2 - rectArry[index].y1
-                );
+            markRect();
+          /*  if(rectArry[index].highLightMark){
+                ctx.strokeStyle="#F00";
+                ctx.lineWidth=1;
+                ctx.strokeRect(rectArry[index].x1, rectArry[index].y1, 
+                    rectArry[index].x2 - rectArry[index].x1,
+                    rectArry[index].y2 - rectArry[index].y1
+                    );
+            }*/
 
         }
-       // }
+       //}
     }
     img.src="small.jpg";
     //canvas.onmousemove=clickRect;
@@ -260,14 +266,28 @@ function init() {
       drawRight(op);
        drawOpArry.push(op);  
     }*/
-
-
-
+    
     canvas.onmousemove = function(evt){
         var mousePos = getCanvasPos(canvas, evt); 
         console.log(mousePos.x + "," + mousePos.y);
         var matRect = matchRect(mousePos);
         if(matRect){
+            //reDraw();
+            console.log(rectCursor+","+lastCursor);
+            if(rectCursor != lastCursor){
+                lastCursor = rectCursor;
+                reDraw();
+                //markRect();
+            }else{
+
+            }
+            
+            //已经高亮
+            /*if(!rectArry[rectCursor].highLightMark){
+                rectArry[rectCursor].highLightMark = true;
+            }else{
+
+            }*/
             //reDraw();
             //ctx.strokeStyle="#F00";/*设置边框*/
             //ctx.lineWidth=1;/*边框的宽度*/ 
@@ -276,23 +296,27 @@ function init() {
               //  matRect.y2 - matRect.y1
                // );
             //$("panel").css("left", mousePos.x);
-
+            /*markRect();
             $("#panel").show().css({
                 "left": matRect.x1,
-                "top": matRect.y1 + $('#mycanvas').offset().top - $("#panel").height()});
+                "top": matRect.y1 + $('#mycanvas').offset().top - $("#panel").height()});*/
         }else{
-            rectCursor = -1;
-            //reDraw();
-            $("#panel").hide();
+            /*rectCursor = -1;
+            if(lastCursor == -1){
+                reDraw();
+                $("#panel").hide();
+            }else{
+                lastCursor = -1;
+            }      */    
+            $("#panel").hide();  
         }
-        locationRect = matRect;
-
+        //locationRect = matRect;
     }
 
-
-    canvas.dblclick = function(evt){
-        alert(2);
-    }
+    
+    document.onkeydown = keybordOp;
+    //document.onclick = markRight;
+    //document.ondblclick = markWrong;
 } 
 
 
@@ -318,11 +342,13 @@ var matchRect = function(mousePos){
         && rectArry[index].x2 > mousePos.x 
         && rectArry[index].y2 > mousePos.y){
             rectCursor = index;
-            console.log(loopTimes);
+            //locationRect = rectArry[index];
+            console.log("loopTimes:" + loopTimes);
             return rectArry[index];
         }
        } 
        console.log(loopTimes);
+       rectCursor = -1;
     return "";
 }
 
@@ -332,35 +358,54 @@ var drawRight = function(op){
         //ctx.drawImage(right,op.mousePos.x,op.mousePos.y-20,30,30);
         ctx.drawImage(right, op.rect.x2 - 30, op.rect.y2 -30, 30, 30);
     }
-    right.src="right_new.png";
+    if(op.right){
+        right.src="right_new.png";
+    }else{
+        right.src="wrong_new.png";
+    }    
 }
 
 var markRight = function(){
-console.log(locationRect);
+console.log(rectArry[rectCursor]);
     var right = new Image();
     right.onload = function(){
-        ctx.drawImage(right, locationRect.x2 - 30, locationRect.y2 -30, 30, 30);
+        ctx.drawImage(right, rectArry[rectCursor].x2 - 30, rectArry[rectCursor].y2 -30, 30, 30);
     }
     right.src="right_new.png";
     var op = {};
-    op.rect = locationRect;
-    op.record = locationRect.record;
+    op.rect = rectArry[rectCursor];
+    op.record = rectArry[rectCursor].record;
+    op.right = true;
     drawOpArry.push(op);
 }
 
 var markWrong = function(){
-    console.log(locationRect);
+    console.log(rectArry[rectCursor]);
     var right = new Image();
     right.onload = function(){
-        ctx.drawImage(right, locationRect.x2 - 30, locationRect.y2 -30, 30, 30);
+        ctx.drawImage(right, rectArry[rectCursor].x2 - 30, rectArry[rectCursor].y2 -30, 30, 30);
     }
     right.src="wrong_new.png";
     var op = {};
-    op.rect = 0;
-    op.record = locationRect.record;
+    op.rect = rectArry[rectCursor];
+    op.record = 0;
+    op.right = false;
     drawOpArry.push(op);
 }
 
+//画出矩形框
+var markRect = function(){
+    ctx.strokeStyle="#0BE500";
+    ctx.lineWidth=1;
+    ctx.strokeRect(rectArry[rectCursor].x1,
+        rectArry[rectCursor].y1,
+        rectArry[rectCursor].x2 - rectArry[rectCursor].x1,
+        rectArry[rectCursor].y2 - rectArry[rectCursor].y1);
+
+    $("#panel").show().css({
+                "left": rectArry[rectCursor].x1,
+                "top": rectArry[rectCursor].y1 + $('#mycanvas').offset().top - $("#panel").height()});
+}
 window.onload = init;
 //撤销操作
 var revokeDraw = function(){
@@ -391,6 +436,46 @@ var countRcd = function(){
     alert("you record is:" + record);
 }
 
+var nextRect = function(){
+    if(rectCursor < rectArry.length){
+         rectCursor = rectCursor + 1;
+        markRect();
+    }
+}
+
+var previousRect = function(){
+    if(rectCursor > 1){
+        rectCursor = rectCursor -1;
+        markRect();
+    }  
+}
+
+var keybordOp = function(evt){
+    console.log(evt.which);
+    switch(evt.which){
+        //press w
+        case 87:
+            markWrong();
+        break;
+        //press r
+        case 82:
+            markRight();
+        break;
+
+        //press u
+        case 85:
+            nextRect();
+        break;
+
+        //press j
+        case 74:
+            previousRect();
+        break;
+
+    }
+}
+
 </script>
 </body>
 </html>
+
