@@ -258,14 +258,23 @@ function init() {
     }
     img.src="small.jpg";
     //canvas.onmousemove=clickRect;
-    /*canvas.onclick= function(evt){
-      var mousePos = getCanvasPos(canvas, evt); 
-      var op = {};
-      op.mousePos = mousePos;
-      op.ret = 0;
-      drawRight(op);
-       drawOpArry.push(op);  
-    }*/
+    canvas.onclick= function(evt){
+       if(rectCursor != -1){
+        
+        var opIndex = matchDrawOpInfo();
+        if(! opIndex){
+            markRight();
+        }else{
+            if(drawOpArry[opIndex].right){
+                drawOpArry[opIndex].right = false;
+            }else{
+                drawOpArry[opIndex].right = true;
+            }
+            reDraw();
+        }   
+       }
+
+    }
     
     canvas.onmousemove = function(evt){
         var mousePos = getCanvasPos(canvas, evt); 
@@ -352,7 +361,16 @@ var matchRect = function(mousePos){
     return "";
 }
 
-var drawRight = function(op){
+var matchDrawOpInfo = function(){
+    for(var index in drawOpArry){
+        if(drawOpArry[index].rectIndex == rectCursor){
+            return index;
+        }
+    }
+    return "";
+}
+
+var drawRightWrong = function(op){
     var right = new Image();
     right.onload = function(){
         //ctx.drawImage(right,op.mousePos.x,op.mousePos.y-20,30,30);
@@ -376,6 +394,7 @@ console.log(rectArry[rectCursor]);
     op.rect = rectArry[rectCursor];
     op.record = rectArry[rectCursor].record;
     op.right = true;
+    op.rectIndex = rectCursor;
     drawOpArry.push(op);
 }
 
@@ -390,6 +409,7 @@ var markWrong = function(){
     op.rect = rectArry[rectCursor];
     op.record = 0;
     op.right = false;
+    op.rectIndex = rectCursor;
     drawOpArry.push(op);
 }
 
@@ -412,14 +432,14 @@ var revokeDraw = function(){
     var op = drawOpArry.pop();
     init();
     for(var index in drawOpArry){
-        drawRight(drawOpArry[index]);
+        drawRightWrong(drawOpArry[index]);
     }
 }
 //重绘
 var reDraw = function(){
    init();
     for(var index in drawOpArry){
-        drawRight(drawOpArry[index]);
+        drawRightWrong(drawOpArry[index]);
     }
 }
 //清除画布手动操作
@@ -440,6 +460,7 @@ var nextRect = function(){
     if(rectCursor < rectArry.length){
          rectCursor = rectCursor + 1;
         markRect();
+        markRight();
     }
 }
 
@@ -478,4 +499,3 @@ var keybordOp = function(evt){
 </script>
 </body>
 </html>
-
